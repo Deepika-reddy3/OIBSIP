@@ -1,0 +1,200 @@
+import pandas as pd,,,,,,
+import numpy as np,,,,,,
+import seaborn as sns,,,,,,
+import matplotlib.pyplot as plt,,,,,,
+"dt=pd.read_csv('spam.csv',encoding='latin')",,,,,,
+dt,,,,,,
+,v1,,v2,Unnamed: 2,Unnamed: 3,Unnamed: 4
+0,ham,"Go until jurong point, crazy.. Available only ...",NaN,NaN,,NaN
+1,ham,,Ok lar... Joking wif u oni...,NaN,NaN,NaN
+2,spam,Free entry in 2 a wkly comp to win FA Cup fina...,NaN,NaN,,NaN
+3,ham,U dun say so early hor... U c already then say...,NaN,NaN,,NaN
+4,ham,"Nah I don't think he goes to usf, he lives aro...",NaN,NaN,,NaN
+...,...,,...,...,...,...
+5567,spam,This is the 2nd time we have tried 2 contact u...,NaN,NaN,,NaN
+5568,ham,Will ?_ b going to esplanade fr home?,NaN,NaN,,NaN
+5569,ham,"Pity, * was in mood for that. So...any other s...",NaN,NaN,,NaN
+5570,ham,The guy did some bitching but I acted like i'd...,NaN,NaN,,NaN
+5571,ham,,Rofl. Its true to its name,NaN,NaN,NaN
+5572 rows × 5 columns,,,,,,
+dt.tail(),,,,,,
+,v1,,v2,Unnamed: 2,Unnamed: 3,Unnamed: 4
+5567,spam,This is the 2nd time we have tried 2 contact u...,NaN,NaN,NaN,
+5568,ham,Will ?_ b going to esplanade fr home?,NaN,NaN,NaN,
+5569,ham,"Pity, * was in mood for that. So...any other s...",NaN,NaN,NaN,
+5570,ham,The guy did some bitching but I acted like i'd...,NaN,NaN,NaN,
+5571,ham,,Rofl. Its true to its name,NaN,NaN,NaN
+dt.size,,,,,,
+27860,,,,,,
+dt.shape,,,,,,
+"(5572, 5)",,,,,,
+dt.info(),,,,,,
+,,,,,,
+"RangeIndex: 5572 entries, 0 to 5571",,,,,,
+Data columns (total 5 columns):,,,,,,
+ # Column Non-Null Count Dtype ,,,,,,
+--- ------ -------------- ----- ,,,,,,
+ 0 v1 5572 non-null object,,,,,,
+ 1 v2 5572 non-null object,,,,,,
+ 2 Unnamed: 2 50 non-null object,,,,,,
+ 3 Unnamed: 3 12 non-null object,,,,,,
+ 4 Unnamed: 4 6 non-null object,,,,,,
+dtypes: object(5),,,,,,
+memory usage: 217.8+ KB,,,,,,
+dt.describe(),,,,,,
+,v1,v2,Unnamed: 2,Unnamed: 3,,Unnamed: 4
+count,5572,5572,50,12,,6
+unique,2,5169,43,10,,5
+top,ham,"Sorry, I'll call later","bt not his girlfrnd... G o o d n i g h t . . .@""","MK17 92H. 450Ppw 16""",,"GNT:-)"""
+freq,4825,30,3,,2,2
+dt.columns,,,,,,
+"Index(['v1', 'v2', 'Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4'], dtype='object')",,,,,,
+"dt.drop(columns=['Unnamed: 2','Unnamed: 3','Unnamed: 4'],inplace=True)",,,,,,
+dt,,,,,,
+,v1,v2
+0,ham,"Go until jurong point, crazy.. Available only ..."
+1,ham,Ok lar... Joking wif u oni...
+2,spam,Free entry in 2 a wkly comp to win FA Cup fina...
+3,ham,U dun say so early hor... U c already then say...
+4,ham,"Nah I don't think he goes to usf, he lives aro..."
+...,...,...
+5567,spam,This is the 2nd time we have tried 2 contact u...
+5568,ham,Will ?_ b going to esplanade fr home?
+5569,ham,"Pity, * was in mood for that. So...any other s..."
+5570,ham,The guy did some bitching but I acted like i'd...
+5571,ham,Rofl. Its true to its name
+5572 rows × 2 columns,,
+"dt=dt.rename(columns={'v1':'Target','v2':'Message'})",,
+dt.isnull().sum(),,
+Target 0,,
+Message 0,,
+dtype: int64,,
+dt.duplicated().sum(),,
+403,,
+"dt.drop_duplicates(keep='first',inplace=True)",,
+dt.duplicated().sum(),,
+0,,
+from sklearn.preprocessing import LabelEncoder,,
+ec=LabelEncoder(),,
+dt['Target']=ec.fit_transform(dt['Target']),,
+dt['Target'],,
+0 0,,
+1 0,,
+2 1,,
+3 0,,
+4 0,,
+, ..,
+5567 1,,
+5568 0,,
+5569 0,,
+5570 0,,
+5571 0,,
+"Name: Target, Length: 5169, dtype: int32",,
+dt.head(),,
+Target,,Message
+0,0,"Go until jurong point, crazy.. Available only ..."
+1,0,Ok lar... Joking wif u oni...
+2,1,Free entry in 2 a wkly comp to win FA Cup fina...
+3,0,U dun say so early hor... U c already then say...
+4,0,"Nah I don't think he goes to usf, he lives aro..."
+"plt.pie(dt['Target'].value_counts(),labels=['ham','spam'],autopct=""%0.3f"")",,
+plt.show(),,
+a=dt['Message']
+print(a)
+"0 Go until jurong point, crazy.. Available only ..."
+1 Ok lar... Joking wif u oni...
+2 Free entry in 2 a wkly comp to win FA Cup fina...
+3 U dun say so early hor... U c already then say...
+"4 Nah I don't think he goes to usf, he lives aro..."
+ ... 
+5567 This is the 2nd time we have tried 2 contact u...
+5568 Will ?_ b going to esplanade fr home?
+"5569 Pity, * was in mood for that. So...any other s..."
+5570 The guy did some bitching but I acted like i'd...
+5571 Rofl. Its true to its name
+"Name: Message, Length: 5169, dtype: object"
+b=dt['Target']
+b
+0 0
+1 0
+2 1
+3 0
+4 0
+ ..
+5567 1
+5568 0
+5569 0
+5570 0
+5571 0
+"Name: Target, Length: 5169, dtype: int32"
+from sklearn.model_selection import train_test_split
+"a_train,a_test,b_train,b_test=train_test_split(a,b,test_size=0.2,random_state=3)"
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn import svm
+cz=CountVectorizer()
+a_train_cz=cz.fit_transform(a_train)
+a_test_cz=cz.transform(a_test)
+print(a_train_cz)
+" (0, 1876) ",,1
+" (0, 1170) ",,1
+" (0, 6822) ",,1
+" (0, 6593) ",,1
+" (0, 2771) ",,1
+" (1, 1936) ",,1
+" (1, 4452) ",,1
+" (1, 453) ",,1
+" (1, 7157) ",,1
+" (1, 7573) ",,1
+" (1, 1575) ",,1
+" (1, 203) ",,1
+" (1, 4754) ",,1
+" (1, 7156) ",,1
+" (1, 7369) ",,1
+" (1, 7569) ",,1
+" (1, 4295) ",,1
+" (1, 5141) ",,1
+" (1, 3717) ",,1
+" (1, 3007) ",,1
+" (1, 2328) ",,1
+" (1, 5194) ",,1
+" (1, 4563) ",,1
+" (1, 4717) ",,1
+" (1, 5598) ",,1
+ : ,:,
+" (4134, 6704) 1",,
+" (4134, 3282) 2",,
+" (4134, 4802) 1",,
+" (4134, 1546) 1",,
+" (4134, 4181) 1",,
+" (4134, 892) ",,1
+" (4134, 1093) 1",,
+" (4134, 1261) 1",,
+" (4134, 7282) 1",,
+" (4134, 6578) 1",,
+" (4134, 1621) 1",,
+" (4134, 1974) 1",,
+" (4134, 7417) 1",,
+" (4134, 6173) 1",,
+" (4134, 6797) 1",,
+" (4134, 2351) 1",,
+" (4134, 4079) 1",,
+" (4134, 6566) 1",,
+" (4134, 5918) 1",,
+" (4134, 1658) 1",,
+" (4134, 5137) 1",,
+" (4134, 6275) 1",,
+" (4134, 6156) 1",,
+" (4134, 3614) 1",,
+" (4134, 4771) 1",,
+from sklearn.linear_model import LogisticRegression,,
+ls=LogisticRegression(),,
+"ls.fit(a_train_cz,b_train)",,
+prediction_train=ls.predict(a_train_cz),,
+from sklearn.metrics import accuracy_score,,
+"print(accuracy_score(b_train,prediction_train)*100)",,
+99.75816203,,
+prediction_test=ls.predict(a_test_cz),,
+from sklearn.metrics import accuracy_score,,
+"print(accuracy_score(b_test,prediction_test)*100)",,
+97.48549323,,
+Loading [MathJax]/jax/output/CommonHTML/fonts/TeX/fontdata.js,,
